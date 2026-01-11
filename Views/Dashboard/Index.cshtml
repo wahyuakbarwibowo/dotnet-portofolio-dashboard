@@ -1,0 +1,42 @@
+@(Html.Kendo().TileLayout()
+    .Name("dashboard")
+    .Columns(4)
+    .Containers(c =>
+    {
+        c.Add().ColSpan(1).RowSpan(1)
+            .BodyTemplate("<h3>Total Projects</h3><h1>12</h1>");
+
+        c.Add().ColSpan(2).RowSpan(1)
+            .BodyTemplate(@<text>
+                @(Html.Kendo().Chart()
+                    .Name("skillChart")
+                    .Series(series =>
+                        series.Column(new[] { 80, 70, 90 })
+                    )
+                    .CategoryAxis(axis =>
+                        axis.Categories("C#", ".NET", "Kendo UI")
+                    )
+                )
+            </text>);
+
+        c.Add().ColSpan(1).RowSpan(2)
+            .BodyTemplate("<h3>Experience</h3><p>3+ Years</p>");
+
+        c.Add().ColSpan(4).RowSpan(2)
+            .BodyTemplate(@<text>
+                @(Html.Kendo().Grid<dynamic>()
+                    .Name("projectGrid")
+                    .Columns(col =>
+                    {
+                        col.Bound("Name");
+                        col.Bound("Tech");
+                        col.Bound("Year");
+                    })
+                    .DataSource(ds => ds
+                        .Ajax()
+                        .Read(r => r.Url("/api/projects"))
+                    )
+                )
+            </text>);
+    })
+)
